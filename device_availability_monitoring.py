@@ -3,6 +3,7 @@ import json
 import csv
 from datetime import datetime
 from pythonping import ping
+import constants
 
 class DeviceAvailabilityMonitoring:
     """
@@ -35,8 +36,8 @@ class DeviceAvailabilityMonitoring:
         """
         Read data from a JSON file and store it in the DataFrame.
         """
-        if not self.file_exist("device_data.json"):
-            with open("device_data.json", "w") as f:
+        if not self.file_exist(constants.INPUT_FILE):
+            with open(constants.INPUT_FILE, "w") as f:
                 json.dump({}, f)
         
         df = pd.read_json('device_data.json').T
@@ -46,11 +47,11 @@ class DeviceAvailabilityMonitoring:
         """
         Write data from the DataFrame to a JSON file.
         """
-        if not self.file_exist("device_data.json"):
-            with open("device_data.json", "w") as f:
+        if not self.file_exist(constants.INPUT_FILE):
+            with open(constants.INPUT_FILE, "w") as f:
                 json.dump({}, f)
         
-        self.data.T.to_json("device_data.json")
+        self.data.T.to_json(constants.INPUT_FILE)
     
     def write_csv(self, device_data: list[list[str]]) -> None:
         """
@@ -59,9 +60,9 @@ class DeviceAvailabilityMonitoring:
         Parameters:
             device_data (list[list[str]]): A list of lists containing device data with columns 'device_id', 'status', and 'Timestamp'.
         """
-        file_exists = self.file_exist("availability_data.csv")
+        file_exists = self.file_exist(constants.OUTPUT_FILE)
         
-        with open("availability_data.csv", "a", newline="") as f:
+        with open(constants.OUTPUT_FILE, "a", newline="") as f:
             writer = csv.writer(f)
             
             if not file_exists:
